@@ -6,8 +6,10 @@ import java.util.StringTokenizer;
  * @author Allen Bui, Sarah Hall
  * @version 1
  */
+
+
 public final class HttpRequest implements Runnable {
-  
+  	// Continue STAGE 1 from Webserver.java, this is 1 - 3. Structure of HttpRequest class
 	final static String CRLF = "\r\n";
 	Socket socket;
   
@@ -26,13 +28,14 @@ public final class HttpRequest implements Runnable {
 	}
     
 	private void processRequest() throws Exception {
+	// Stage 1 - 4. Creating Socket streams 
 		// Get a reference to the socket's input and output streams.
 		InputStream is = socket.getInputStream();
 		DataOutputStream os = new DataOutputStream(socket.getOutputStream());
 	    
 		// Set up input stream filters.
 		BufferedReader br = new BufferedReader(new InputStreamReader(is)); 
-		  
+	// Stage 1 - 5. Reading the Request	  
 		//Get the request line of the HTTP request message.
 		String requestLine = br.readLine();
 		  
@@ -44,7 +47,7 @@ public final class HttpRequest implements Runnable {
 			
 		boolean badRequest = false;
 		boolean methodNotImplemented = false;
-	    
+	//Stage 2 - 1. Parse the request    
 		String fileName = null;
 		String version = null;
 		
@@ -69,7 +72,8 @@ public final class HttpRequest implements Runnable {
 		boolean fileExists = true;
 		boolean fileOpen = true;
 		FileInputStream fis = null;
-	    
+	    	
+		 
 		if (!command.equals("GET")) {
 			methodNotImplemented = true;
 		}
@@ -83,7 +87,7 @@ public final class HttpRequest implements Runnable {
 		String statusLine = null;
 		String contentTypeLine = null;
 		String entityBody = null;
-	    
+	// Stage 2 - 2. Checking if the requested file exists  
 		if (!(badRequest || methodNotImplemented)) {
 			// Open the requested file.
 			try {
@@ -92,7 +96,7 @@ public final class HttpRequest implements Runnable {
 				System.out.println("File not found");
 				fileExists = false;
 			}
-	      
+	      		// Construct status line based on ability to open file & file existing
 			if (fileExists && fileOpen) {
 				statusLine = "HTTP/1.1 200 OK" + CRLF;
 				contentTypeLine = "Content-type: " + contentType(fileName) + CRLF;
@@ -110,7 +114,7 @@ public final class HttpRequest implements Runnable {
 				}
 			}
 		}
-	    
+	// Stage 2 - 3 & 5. Creating & Sending the response
 		// Send the status line.
 		os.writeBytes(statusLine);
 		  
@@ -133,7 +137,7 @@ public final class HttpRequest implements Runnable {
 	    	 os.writeBytes(entityBody);
 		}
 	    
-	    
+	// Stage 2 - 6. Closing the Connection 
 	    os.close();
 
 	    // Get and display the header lines.  
@@ -146,7 +150,7 @@ public final class HttpRequest implements Runnable {
 	    
 		socket.close();
   	}
-  
+
   
   	private static void sendBytes(FileInputStream fis, OutputStream os) throws Exception {
 
@@ -160,7 +164,7 @@ public final class HttpRequest implements Runnable {
   			os.write(buffer, 0, bytes);
   		}
   	}
-
+    // Stage 2 - 4. Determining the MIME type
     private static String contentType(String fileName) {
 	  
     	if (fileName.endsWith(".htm") || fileName.endsWith(".html")) {
@@ -207,4 +211,5 @@ public final class HttpRequest implements Runnable {
    
     	return "application/octet-stream";
     }
+  
 }

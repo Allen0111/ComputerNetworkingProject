@@ -4,6 +4,8 @@ import java.net.* ;
  * @author Allen Bui, Sarah Hall
  * @Version 1
  */
+
+//Begin STAGE 1
 public final class WebServer {
 	
 	/**
@@ -14,15 +16,17 @@ public final class WebServer {
 	 */
 	public static void main(String args[]) throws Exception {
 
-		// Determine the port number
+		// Stage 1 - 1. Determine the port number
 		int port = 5000;
 
 		// Establish the listen socket.
 		@SuppressWarnings("resource")
 		ServerSocket listenSocket = new ServerSocket(port);
 
+		// Stage 1 - 2. Accepting TCP connection
 		// Process HTTP service requests in an infinite loop
 		while (true) {
+			
 			// Listen for a TCP connection request.
 			Socket connectionSocket = listenSocket.accept();
       
