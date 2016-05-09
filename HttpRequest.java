@@ -3,7 +3,9 @@ import java.net.* ;
 import java.util.StringTokenizer;
 /**
  * 
- * @author Allen Bui, Sarah Hall
+ * @author Allen Bui, Sarah Hall (s462b746)
+ * Webserver written in Java for Networking Project. Multi-threaded to process more than 1 client request. Prints the request on the server end, serves files on client end along with correct Header   
+ * response. 
  * @version 1
  */
 
